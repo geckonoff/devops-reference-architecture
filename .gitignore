@@ -14,3 +14,11 @@ tmp/
 *.old
 *.log
 *.tmp
+
+# Generated/temp files
+*.bak
+*.old
+*.1
+*.2
+*.3
+.DS_Store

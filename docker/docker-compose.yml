@@ -1,0 +1,68 @@
+version: '3.3'
+services:
+  example-post_db:
+    image: mongo:3.2
+    volumes:
+      - example-post_db:/data/db
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.2
+  example-ui:
+    bexample-uild: ../src/example-ui
+    image: ${USERNAME}/example-ui:${SERVVER}
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.example-post
+    ports:
+      - 9292:9292/tcp
+    networks:
+      front_net:
+        ipv4_address: 10.0.1.3
+  example-post:
+    bexample-uild: ../src/example-post-py
+    image: ${USERNAME}/example-post:${SERVVER}
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.example-post
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.4
+      front_net:
+        ipv4_address: 10.0.1.4
+  example-comment:
+    bexample-uild: ../src/example-comment
+    image: ${USERNAME}/example-comment:${SERVVER}
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.5
+      front_net:
+        ipv4_address: 10.0.1.5
+
+volumes:
+  example-post_db:
+  prometheus_data:
+
+networks:
+  back_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${BACKNET}
+  front_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${FRONTNET}
+

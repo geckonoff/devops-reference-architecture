@@ -1,0 +1,116 @@
+version: '3.3'
+services:
+  prometheus:
+    image: ${USERNAME}/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+    command: # Передаем доп параметры в командной строке
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=1d' # Задаем время хранения метрик в 1 день
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.6
+      front_net:
+        ipv4_address: 10.0.1.6
+  
+  node-exporter:
+    image: prom/node-exporter:v0.15.2
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.7
+      front_net:
+        ipv4_address: 10.0.1.7
+
+  mongodb-exporter:
+    image: bitnami/mongodb-exporter:latest
+    command:
+      - '--mongodb.uri=mongodb://example-post_db:27017'
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.8
+      front_net:
+        ipv4_address: 10.0.1.8
+  blackboxexporter:
+    image: ${USERNAME}/blackboxexporter
+    ports:
+      - '9115:9115'
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.9
+      front_net:
+        ipv4_address: 10.0.1.9
+  
+  cadvisor:
+    image: google/cadvisor:v0.29.0
+    volumes:
+      - '/:/rootfs:ro'
+      - '/var/run:/var/run:rw'
+      - '/sys:/sys:ro'
+      - '/var/lib/docker/:/var/lib/docker:ro'
+    ports:
+      - '8080:8080'
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.10
+      front_net:
+        ipv4_address: 10.0.1.10
+  
+  grafana:
+    image: grafana/grafana:5.0.0
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.11
+      front_net:
+        ipv4_address: 10.0.1.11
+   
+  alertmanager:
+    image: ${USER_NAME}/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+      - 9093:9093  
+    networks:
+      back_net:
+        ipv4_address: 10.0.2.12
+      front_net:
+        ipv4_address: 10.0.1.12
+
+volumes:
+  grafana_data:
+  example-post_db:
+  prometheus_data:
+
+networks:
+  back_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${BACKNET}
+  front_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${FRONTNET}

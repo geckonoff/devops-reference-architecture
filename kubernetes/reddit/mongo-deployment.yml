@@ -1,0 +1,69 @@
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: mongo
+#   labels:
+#     app: example-app
+#     component: mongo
+#     example-comment-db: "true"
+#     example-post-db: "true"
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: example-app
+#       component: mongo
+#   template:
+#     metadata:
+#       name: mongo
+#       labels:
+#         app: example-app
+#         component: mongo
+#         example-comment-db: "true"
+#         example-post-db: "true"
+#     spec:
+#       containers:
+#       - image: mongo:3.2
+#         name: mongo
+#         volumeMounts:
+#         - name: mongo-persistent-storage
+#           mountPath: /data/db
+#       volumes:
+#       - name: mongo-persistent-storage
+#         emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-gce-pd-storage
+  labels:
+    app: example-app
+    component: mongo
+    example-post-db: "true"
+    example-comment-db: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-app
+      component: mongo
+  template:
+    metadata:
+      name: mongo
+      labels:
+        app: example-app
+        component: mongo
+        example-post-db: "true"
+        example-comment-db: "true"
+    spec:
+      containers:
+      - image: mongo:3.2
+        name: mongo
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-persistent-storage
+        persistentVolumeClaim:
+          claimName:  mongo-pvc

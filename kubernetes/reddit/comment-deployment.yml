@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-comment
+  labels:
+    app: example-app
+    component: example-comment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-app
+      component: example-comment
+  template:
+    metadata:
+      name: example-comment
+      labels:
+        app: example-app
+        component: example-comment
+    spec:
+      containers:
+      - image: mzabolotnov/example-comment
+        name: example-comment
+        env:
+        - name: COMMENT_DATABASE_HOST
+          value: example-comment-db

@@ -1,0 +1,45 @@
+---
+version: '3.3'
+services:
+  example-post_db:
+    image: mongo:3.2
+    volumes:
+      - example-post_db:/data/db
+    networks:
+      back_net:
+  example-ui:
+    bexample-uild: ./example-ui
+    image: ${USERNAME}/example-ui:${SERVVER}
+    ports:
+      - 9292:9292/tcp
+    networks:
+      front_net:
+  example-post:
+    bexample-uild: ./example-post-py
+    image: ${USERNAME}/example-post:${SERVVER}
+    networks:
+      back_net:
+      front_net:
+  example-comment:
+    bexample-uild: ./example-comment
+    image: ${USERNAME}/example-comment:${SERVVER}
+    networks:
+      back_net:
+      front_net:
+
+volumes:
+  example-post_db:
+
+networks:
+  back_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${BACKNET}
+  front_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${FRONTNET}

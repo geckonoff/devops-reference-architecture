@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-ui
+  labels:
+    app: example-app
+    component: example-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-app
+      component: example-ui
+  template:
+    metadata:
+      name: example-ui-pod
+      labels:
+        app: example-app
+        component: example-ui
+    spec:
+      containers:
+      - image: mzabolotnov/example-ui
+        name: example-ui
+        env:
+        - name: ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace

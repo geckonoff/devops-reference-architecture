@@ -1,0 +1,21 @@
+---
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: deny-db-traffic
+    labels:
+      app: example-app
+  spec:
+    podSelector:
+      matchLabels:
+        app: example-app
+        component: mongo
+    policyTypes:
+    - Ingress
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: example-app
+            component: example-comment
+            component: example-post

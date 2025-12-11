@@ -1,0 +1,16 @@
+
+# Backup & temp files
+*.bak
+*.old
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# Ignore backups
+tmp/
+*.bak
+*.old
+*.log
+*.tmp

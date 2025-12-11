@@ -1,0 +1,23 @@
+{
+    "builders": [
+        {
+            "folder_id": "{{user `yc_folder_id`}}",
+            "source_image_id": "{{user `yc_source_image_id`}}",
+            "service_account_key_file": "{{user `yc_service_account_key_file`}}",
+            "type": "yandex",
+            "image_name": "reddit-app-base-{{timestamp}}",
+            "image_family": "reddit-app-base",
+            "ssh_username": "ubuntu",
+            "platform_id": "standard-v1",
+            "instance_cores": "{{user `yc_instance_cores`}}",
+            "disk_size_gb": "{{user `yc_disk_size`}}",
+            "use_ipv4_nat": "true"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "playbook_file": "ansible/site.yml"
+        }
+    ]
+}

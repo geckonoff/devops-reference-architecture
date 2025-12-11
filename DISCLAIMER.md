@@ -26,7 +26,7 @@ This repository is a **reference implementation** and **portfolio demonstration*
 
 For NDA-protected discussions, architecture reviews, or custom implementation support:  
 **Aleksei Shibanov** — Freelance DevOps Engineer  
-📧 [alex.shi@cplugin.com](mailto:alex.shi@cplugin.com)  
+📧 [ag.shibanov@gmail.com](mailto:ag.shibanov@gmail.com)  
 📍 Germany
 
 > *“Infrastructure is a means — reliability, security, and maintainability are the goals.”*

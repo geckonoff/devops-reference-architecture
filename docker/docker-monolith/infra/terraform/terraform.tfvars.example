@@ -1,0 +1,15 @@
+cloud_id                 = "b1g730q1t94lbv6lagff"
+folder_id                = "b1g0m7gthn4g87f5103c"
+zone                     = "ru-central1-a"
+yandex_zone              = "ru-central1-a"
+image_id                 = "fd87sic59c2o3hc9rup8"
+public_key_path          = "~/.ssh/ash.pub"
+subnet_id                = "e9bj6e9d2armga9ud6ml"
+service_account_key_file = "/Users/ash/Dropbox/Documents/OTUS_DEVOPS/key2.json"
+private_key_path         = "~/.ssh/ash"
+app_disk_image           = "fd8tf3qol20vj908ncoi"
+db_disk_image            = "fd86jpdhs5foj54eq3qn"
+db_cores                 = 2
+db_memory                = 2
+app_cores                = 4
+app_memory               = 16

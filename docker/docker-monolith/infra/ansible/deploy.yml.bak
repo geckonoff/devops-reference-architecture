@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Run Docker app and run it
+      shell: docker run --name reddit -p 9292:9292 --rm -it geckonoff/otus-reddit:1.0 /start.sh &
+

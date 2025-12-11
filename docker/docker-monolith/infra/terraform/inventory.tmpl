@@ -1,0 +1,4 @@
+[docker]
+%{ for index, ip_d in docker_ip ~}
+docker${docker_ip[index]} ansible_host=${ip_d} ansible_user=ubuntu  ansible_private_key_file=~/.ssh/ash
+%{ endfor ~}

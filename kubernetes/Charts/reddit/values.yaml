@@ -1,0 +1,20 @@
+example-comment:
+  image:
+    repository: mzabolotnov/example-comment
+    tag: latest
+  service:
+    externalPort: 9292
+
+example-post:
+  image:
+    repository: mzabolotnov/example-post
+    tag: latest
+  service:
+    externalPort: 5000
+
+example-ui:
+  image:
+    repository: mzabolotnov/example-ui
+    tag: latest
+  service:
+    externalPort: 9292

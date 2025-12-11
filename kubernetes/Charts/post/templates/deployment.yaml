@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "example-post.fullname" . }}
+  labels:
+    app: example-app
+    component: example-post
+    release: {{ .Release.Name }}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-app
+      component: example-post
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      name: example-post
+      labels:
+        app: example-app
+        component: example-post
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: example-post
+        ports:
+          - containerPort: {{ .Values.service.internalPort }}
+            name: example-post
+            protocol: TCP
+        env:
+          - name: POST_DATABASE_HOST
+            value: {{ .Values.databaseHost | default (printf "%s-mongodb" .Release.Name) }}

@@ -1,0 +1,7 @@
+name: example-ui
+version: 1.0.0
+description: OTUS example-app application UI
+maintainers:
+ - name: mzabolotnov
+   email: mike@gmail.com
+appVersion: 1.0

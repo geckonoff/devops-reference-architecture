@@ -1,0 +1,16 @@
+---
+service:
+  internalPort: 9292
+  externalPort: 9292
+
+image:
+  repository: mzabolotnov/example-ui
+  tag: latest
+
+ingress:
+  class: nginx
+
+example-postHost:
+example-postPort:
+example-commentHost:
+example-commentPort:

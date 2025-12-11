@@ -1,0 +1,17 @@
+---
+dependencies:
+  - name: example-ui
+    version: "1.0.0"
+    repository: "file://../example-ui"
+
+  - name: example-post
+    version: "1.0.0"
+    repository: "file://../example-post"
+
+  - name: example-comment
+    version: "1.0.0"
+    repository: "file://../example-comment"
+
+  - name: mongodb
+    version: 7.8.10
+    repository: https://charts.helm.sh/stable

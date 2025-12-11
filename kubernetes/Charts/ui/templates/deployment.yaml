@@ -1,0 +1,150 @@
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: example-ui
+#   labels:
+#     app: example-app
+#     component: example-ui
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: example-app
+#       component: example-ui
+#   template:
+#     metadata:
+#       name: example-ui-pod
+#       labels:
+#         app: example-app
+#         component: example-ui
+#     spec:
+#       containers:
+#       - image: mzabolotnov/example-ui
+#         name: example-ui
+#         env:
+#         - name: ENV
+#           valueFrom:
+#             fieldRef:
+#               fieldPath: metadata.namespace
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: {{ .Release.Name }}-{{ .Chart.Name }}
+#   labels:
+#     app: example-app
+#     component: example-ui
+#     release: {{ .Release.Name }}
+# spec:
+#   replicas: 3
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: example-app
+#       component: example-ui
+#       release: {{ .Release.Name }}
+#   template:
+#     metadata:
+#       name: example-ui
+#       labels:
+#         app: example-app
+#         component: example-ui
+#         release: {{ .Release.Name }}
+#     spec:
+#       containers:
+#       - image: mzabolotnov/example-ui
+#         name: example-ui
+#         ports:
+#         - containerPort: 9292
+#           name: example-ui
+#           protocol: TCP
+#         env:
+#         - name: ENV
+#           valueFrom:
+#             fieldRef:
+#               fieldPath: metadata.namespace
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: {{ template "example-ui.fullname" . }}
+#   labels:
+#     app: example-app
+#     component: example-ui
+#     release: {{ .Release.Name }}
+# spec:
+#   replicas: 3
+#   strategy:
+#     type: Recreate
+#   selector:
+#     matchLabels:
+#       app: example-app
+#       component: example-ui
+#       release: {{ .Release.Name }}
+#   template:
+#     metadata:
+#       name: example-ui
+#       labels:
+#         app: example-app
+#         component: example-ui
+#         release: {{ .Release.Name }}
+#     spec:
+#       containers:
+#       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+#         name: example-ui
+#         ports:
+#         - containerPort: {{ .Values.service.internalPort }}
+#           name: example-ui
+#           protocol: TCP
+#         env:
+#         - name: ENV
+#           valueFrom:
+#             fieldRef:
+#               fieldPath: metadata.namespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "example-ui.fullname" . }}
+  labels:
+    app: example-app
+    component: example-ui
+    release: {{ .Release.Name }}
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: example-app
+      component: example-ui
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      name: example-ui
+      labels:
+        app: example-app
+        component: example-ui
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: example-ui
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+          name: example-ui
+        env:
+        - name: POST_SERVICE_HOST
+          value: {{  .Values.example-postHost | default (printf "%s-example-post" .Release.Name) }}
+        - name: POST_SERVICE_PORT
+          value: {{  .Values.example-postPort | default "5000" | quote }}
+        - name: COMMENT_SERVICE_HOST
+          value: {{  .Values.example-commentHost | default (printf "%s-example-comment" .Release.Name) }}
+        - name: COMMENT_SERVICE_PORT
+          value: {{  .Values.example-commentPort | default "9292" | quote }}
+        - name: ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace

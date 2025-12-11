@@ -1,0 +1,6 @@
+name: example-app
+version: 0.1.0
+description: OTUS sample example-app application
+maintainers:
+  - name: Mikhail Zabolotov
+    email: mike@gmail.com
